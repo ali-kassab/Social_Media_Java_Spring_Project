@@ -1,16 +1,21 @@
 package com.example.SpringBootMVC.user.service;
 
+import com.example.SpringBootMVC.exception.OldPasswordIncorrectException;
 import com.example.SpringBootMVC.exception.ResourceAlreadyExistsException;
+import com.example.SpringBootMVC.exception.UserNotFoundException;
 import com.example.SpringBootMVC.role.entity.Role;
 import com.example.SpringBootMVC.role.repository.RoleRepository;
+import com.example.SpringBootMVC.user.dto.ChangePasswordReq;
 import com.example.SpringBootMVC.user.dto.UserCreateRequest;
 import com.example.SpringBootMVC.user.dto.UserResponse;
 import com.example.SpringBootMVC.user.dto.UserUpdateRequest;
 import com.example.SpringBootMVC.user.entity.User;
 import com.example.SpringBootMVC.user.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse updateUser(Long userId, UserUpdateRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("user not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException());
         if (request.getName() != null) {
             user.setName(request.getName());
         }
@@ -85,4 +90,29 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Override
+    public String changePassword(ChangePasswordReq request) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException());
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            throw new OldPasswordIncorrectException();
+        }
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+        return "password changed successfully";
+    }
+
+    @Override
+    public UserResponse getLoggedUserData() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
+        UserResponse response = new UserResponse(user.getId(), user.getName(), user.getEmail());
+        return response;
+    }
 }

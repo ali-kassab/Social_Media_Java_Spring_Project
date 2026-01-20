@@ -7,7 +7,6 @@ public class UserResponse {
 
     public UserResponse() {
     }
-
     public UserResponse(Long id,String name, String email) {
         this.name = name;
         this.email = email;
