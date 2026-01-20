@@ -1,5 +1,6 @@
 package com.example.SpringBootMVC.post.dto;
 
+import com.example.SpringBootMVC.user.dto.UserResponse;
 import com.example.SpringBootMVC.user.entity.User;
 
 import java.time.Instant;
@@ -8,12 +9,12 @@ import java.time.Instant;
 public class PostResponse {
 
     private Long id;
-    private User user;
+    private UserResponse user;
     private String title;
     private String content;
     private Instant createdAt;
 
-    public PostResponse(Long id, User user, String title, String content, Instant createdAt) {
+    public PostResponse(Long id, UserResponse user, String title, String content, Instant createdAt) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -25,7 +26,7 @@ public class PostResponse {
         return id;
     }
 
-    public User getUser() {
+    public UserResponse getUser() {
         return user;
     }
 

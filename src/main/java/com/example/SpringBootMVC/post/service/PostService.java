@@ -9,4 +9,5 @@ import java.util.List;
 public interface PostService {
     List<PostResponse> getAllPosts();
     String createPost(PostCreateRequest request);
+    String deletePost(Long post_id);
 }

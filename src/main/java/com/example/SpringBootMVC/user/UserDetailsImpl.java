@@ -1,5 +1,6 @@
 package com.example.SpringBootMVC.user;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,6 +9,7 @@ import java.util.Set;
 
 public class UserDetailsImpl implements UserDetails {
 
+    @Getter
     private final Long id;
     private final String email;
     private final String password;
