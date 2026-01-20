@@ -1,0 +1,12 @@
+package com.example.SpringBootMVC.post.service;
+
+
+import com.example.SpringBootMVC.post.dto.PostCreateRequest;
+import com.example.SpringBootMVC.post.dto.PostResponse;
+
+import java.util.List;
+
+public interface PostService {
+    List<PostResponse> getAllPosts();
+    String createPost(PostCreateRequest request);
+}
