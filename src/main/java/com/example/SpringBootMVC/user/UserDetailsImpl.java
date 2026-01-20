@@ -8,11 +8,13 @@ import java.util.Set;
 
 public class UserDetailsImpl implements UserDetails {
 
+    private final Long id;
     private final String email;
     private final String password;
     private final Set<GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String email, String password, Set<GrantedAuthority> authorities) {
+    public UserDetailsImpl(Long id, String email, String password, Set<GrantedAuthority> authorities) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
