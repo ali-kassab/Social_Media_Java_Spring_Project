@@ -4,6 +4,7 @@ import com.example.SpringBootMVC.exception.UserNotFoundException;
 import com.example.SpringBootMVC.post.Repository.PostRepository;
 import com.example.SpringBootMVC.post.dto.PostCreateRequest;
 import com.example.SpringBootMVC.post.dto.PostResponse;
+import com.example.SpringBootMVC.post.dto.PostUpdateRequest;
 import com.example.SpringBootMVC.post.entity.Post;
 import com.example.SpringBootMVC.user.UserDetailsImpl;
 import com.example.SpringBootMVC.user.dto.UserResponse;
@@ -57,8 +58,7 @@ public class PostServiceImpl implements PostService {
         Post post = new Post(
                 user,
                 request.getTitle(),
-                request.getContent(),
-                request.getCreated_at()
+                request.getContent()
         );
         postRepository.save(post);
         return "Post created successfully";
@@ -82,5 +82,22 @@ public class PostServiceImpl implements PostService {
         }else {
             return "User is not authorized to do this action";
         }*/
+    }
+
+    @Override
+    public String updatePost(PostUpdateRequest request) {
+        Post post = postRepository.findById(request.getPost_id()).orElseThrow(() -> new RuntimeException("Post not found"));
+
+        if (utils.isAuthorizedForThis(request.getUser_id())) {
+            if (request.getTitle() != null) {
+                post.setTitle(request.getTitle());
+            }
+            if (request.getContent() != null) {
+                post.setContent(request.getContent());
+            }
+            postRepository.save(post);
+            return "Post updated successfully";
+        }
+        return "User is not authorized to do this action";
     }
 }

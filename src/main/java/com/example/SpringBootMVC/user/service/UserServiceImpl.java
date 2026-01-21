@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
             Role userRole = roleRepository.findByName("ROLE_USER").orElseGet(() -> roleRepository.save(new Role("ROLE_USER")));
         }
         User savedUser = userRepository.save(user);
-        return "user craete successfully";
+        return "user created successfully";
     }
 
     @Override
