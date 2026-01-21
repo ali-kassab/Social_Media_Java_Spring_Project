@@ -46,7 +46,9 @@ public class PostServiceImpl implements PostService {
                         ),
                         post.getTitle(),
                         post.getContent(),
+                        post.getUpdatedAt(),
                         post.getCreatedAt()
+
                 )).collect(Collectors.toList());
     }
 

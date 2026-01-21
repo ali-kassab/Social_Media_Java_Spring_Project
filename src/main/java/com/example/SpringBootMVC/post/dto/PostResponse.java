@@ -13,13 +13,15 @@ public class PostResponse {
     private String title;
     private String content;
     private Instant createdAt;
+    private Instant updatedAt;
 
-    public PostResponse(Long id, UserResponse user, String title, String content, Instant createdAt) {
+    public PostResponse(Long id, UserResponse user, String title, String content, Instant createdAt, Instant updatedAt) {
         this.id = id;
         this.user = user;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -40,5 +42,9 @@ public class PostResponse {
 
     public Instant getCreatedAt() {
         return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
     }
 }
