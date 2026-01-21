@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("file is required");
         }
 
-        Long userId = utils.getUserIDFromAuth();
+        Long userId = utils.getUserAuthData().getId();
 
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
