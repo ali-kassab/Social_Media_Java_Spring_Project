@@ -15,7 +15,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "comments", schema = "alishopdb")
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,6 @@ public class Comment {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 

@@ -1,17 +1,13 @@
 package com.example.SpringBootMVC.user.controller;
 
-import com.example.SpringBootMVC.user.dto.ChangePasswordReq;
-import com.example.SpringBootMVC.user.dto.UserCreateRequest;
-import com.example.SpringBootMVC.user.dto.UserResponse;
-import com.example.SpringBootMVC.user.dto.UserUpdateRequest;
-import com.example.SpringBootMVC.user.entity.User;
+import com.example.SpringBootMVC.user.dto.*;
 import com.example.SpringBootMVC.user.service.UserService;
 import jakarta.validation.Valid;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -59,6 +55,13 @@ public class UserController {
     @GetMapping("/user-details")
     public ResponseEntity<UserResponse> getLoggedUserData() {
         UserResponse response = userService.getLoggedUserData();
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/upload-profile-photo")
+    public ResponseEntity<UploadResponse> uploadProfilePhoto(@RequestParam("file") MultipartFile file) {
+        String imageUrl = userService.uploadProfilePhoto(file);
+        UploadResponse response = new UploadResponse("Profile Phot uploaded successfully", imageUrl);
         return ResponseEntity.ok(response);
     }
 }

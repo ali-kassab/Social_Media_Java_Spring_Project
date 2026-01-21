@@ -18,7 +18,7 @@ import java.time.Instant;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "posts", schema = "alishopdb")
+@Table(name = "posts")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package com.example.SpringBootMVC.user.service;
 
+import com.example.SpringBootMVC.config.CloudinaryService;
 import com.example.SpringBootMVC.exception.OldPasswordIncorrectException;
 import com.example.SpringBootMVC.exception.ResourceAlreadyExistsException;
 import com.example.SpringBootMVC.exception.UserNotFoundException;
@@ -11,11 +12,13 @@ import com.example.SpringBootMVC.user.dto.UserResponse;
 import com.example.SpringBootMVC.user.dto.UserUpdateRequest;
 import com.example.SpringBootMVC.user.entity.User;
 import com.example.SpringBootMVC.user.repository.UserRepository;
+import com.example.SpringBootMVC.utils.Utils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.List;
@@ -28,14 +31,20 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private Utils utils;
+    private CloudinaryService cloudinaryService;
 
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder
+                           PasswordEncoder passwordEncoder,
+                           Utils utils,
+                           CloudinaryService cloudinaryService
     ) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.utils = utils;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @Override
@@ -60,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> getAllUsers() {
+
         return userRepository.findAll()
                 .stream()
                 .map(user -> new UserResponse(
@@ -115,4 +125,26 @@ public class UserServiceImpl implements UserService {
         UserResponse response = new UserResponse(user.getId(), user.getName(), user.getEmail());
         return response;
     }
+
+    @Override
+    public String uploadProfilePhoto(MultipartFile file) {
+
+        if (file.isEmpty()) {
+            throw new RuntimeException("file is required");
+        }
+
+        Long userId = utils.getUserIDFromAuth();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        String imageUrl = cloudinaryService.uploadImage(file);
+
+        user.setProfileImageUrl(imageUrl);
+        userRepository.save(user);
+
+        return imageUrl;
+    }
+
+
 }

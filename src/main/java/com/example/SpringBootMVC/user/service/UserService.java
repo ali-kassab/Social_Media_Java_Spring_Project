@@ -1,10 +1,8 @@
 package com.example.SpringBootMVC.user.service;
 
-import com.example.SpringBootMVC.user.dto.ChangePasswordReq;
-import com.example.SpringBootMVC.user.dto.UserCreateRequest;
-import com.example.SpringBootMVC.user.dto.UserResponse;
-import com.example.SpringBootMVC.user.dto.UserUpdateRequest;
+import com.example.SpringBootMVC.user.dto.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,5 +16,7 @@ public interface UserService {
     String changePassword(ChangePasswordReq request);
 
     UserResponse getLoggedUserData();
+
+    String uploadProfilePhoto(MultipartFile file);
 
 }
