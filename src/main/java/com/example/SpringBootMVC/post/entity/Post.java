@@ -41,14 +41,33 @@ public class Post {
     @Column(name = "content", nullable = false)
     private String content;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private Instant createdAt;
+
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private Instant updatedAt;
+  /*  @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
     private Instant createdAt;
 
-    public Post(User user, String title, String content, Instant createdAt) {
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;*/
+
+  /*  @PrePersist
+    protected void onCreate() {
+        Instant now = Instant.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Instant.now();
+    }*/
+    public Post(User user, String title, String content) {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.createdAt = createdAt;
     }
 }

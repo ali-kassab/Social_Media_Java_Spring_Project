@@ -2,6 +2,7 @@ package com.example.SpringBootMVC.post.controller;
 
 import com.example.SpringBootMVC.post.dto.PostCreateRequest;
 import com.example.SpringBootMVC.post.dto.PostResponse;
+import com.example.SpringBootMVC.post.dto.PostUpdateRequest;
 import com.example.SpringBootMVC.post.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -39,4 +40,12 @@ public class PostController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PatchMapping
+    public ResponseEntity<String> updatePost(
+            @Valid
+            @RequestBody
+            PostUpdateRequest request){
+        String response = postService.updatePost(request);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
 }
