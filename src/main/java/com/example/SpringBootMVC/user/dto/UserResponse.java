@@ -1,19 +1,21 @@
 package com.example.SpringBootMVC.user.dto;
 
+import com.example.SpringBootMVC.config.CloudinaryService;
+
 public class UserResponse {
     private Long id;
     private String name;
     private String email;
-    private String profileImageUrl;
+    private String profileImage;
 
     public UserResponse() {
     }
 
-    public UserResponse(Long id, String name, String email ,String profileImageUrl) {
+    public UserResponse(Long id, String name, String email, String profileImage) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.profileImageUrl = profileImageUrl;
+        this.profileImage = profileImage;
     }
 
     public Long getId() {
@@ -41,10 +43,10 @@ public class UserResponse {
     }
 
     public String getProfileImageUrl() {
-        return profileImageUrl;
+        return profileImage;
     }
 
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }

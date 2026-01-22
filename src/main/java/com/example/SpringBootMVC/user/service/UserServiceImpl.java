@@ -123,7 +123,11 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
-        UserResponse response = new UserResponse(user.getId(), user.getName(), user.getEmail(),user.getProfileImage());
+        String profileImageUrl = user.getProfileImage() != null
+                ? cloudinaryService.buildImageUrl(user.getProfileImage())
+                : null;
+        UserResponse response = new UserResponse(user.getId(), user.getName(), user.getEmail(),profileImageUrl);
+
         return response;
     }
 
@@ -140,7 +144,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(UserNotFoundException::new);
 
         String publicId = cloudinaryService.uploadImage(file);
-
         user.setProfileImageUrl(publicId);
         userRepository.save(user);
 
