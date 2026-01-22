@@ -75,7 +75,8 @@ public class UserServiceImpl implements UserService {
                 .map(user -> new UserResponse(
                         user.getId(),
                         user.getName(),
-                        user.getEmail()
+                        user.getEmail(),
+                        user.getProfileImage()
                 )).collect(Collectors.toList());
     }
 
@@ -96,7 +97,7 @@ public class UserServiceImpl implements UserService {
         }
         User UpdatedUser = userRepository.save(user);
         return new UserResponse(
-                UpdatedUser.getId(), UpdatedUser.getName(), UpdatedUser.getEmail()
+                UpdatedUser.getId(), UpdatedUser.getName(), UpdatedUser.getEmail(), UpdatedUser.getProfileImage()
         );
     }
 
@@ -122,7 +123,7 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
-        UserResponse response = new UserResponse(user.getId(), user.getName(), user.getEmail());
+        UserResponse response = new UserResponse(user.getId(), user.getName(), user.getEmail(),user.getProfileImage());
         return response;
     }
 
@@ -138,12 +139,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        String imageUrl = cloudinaryService.uploadImage(file);
+        String publicId = cloudinaryService.uploadImage(file);
 
-        user.setProfileImageUrl(imageUrl);
+        user.setProfileImageUrl(publicId);
         userRepository.save(user);
 
-        return imageUrl;
+        return cloudinaryService.buildImageUrl(publicId);
     }
 
 

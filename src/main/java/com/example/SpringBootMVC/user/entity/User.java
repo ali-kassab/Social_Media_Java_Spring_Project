@@ -32,8 +32,8 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "profile_image_url")
-    private String profileImageUrl;
+    @Column(name = "profile_image")
+    private String profileImage;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
@@ -64,12 +64,12 @@ public class User {
         return id;
     }
 
-    public void setProfileImageUrl(String profileImageUrl) {
-        this.profileImageUrl = profileImageUrl;
+    public void setProfileImageUrl(String profileImage) {
+        this.profileImage = profileImage;
     }
 
-    public String getProfileImageUrl() {
-        return profileImageUrl;
+    public String getProfileImage() {
+        return profileImage;
     }
 
     public String getName() {

@@ -42,7 +42,8 @@ public class PostServiceImpl implements PostService {
                         new UserResponse(
                                 post.getUser().getId(),
                                 post.getUser().getName(),
-                                post.getUser().getEmail()
+                                post.getUser().getEmail(),
+                                post.getUser().getProfileImage()
                         ),
                         post.getTitle(),
                         post.getContent(),

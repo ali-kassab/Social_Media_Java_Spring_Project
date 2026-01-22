@@ -20,9 +20,16 @@ public class CloudinaryService {
     public String uploadImage(MultipartFile file) {
         try {
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(), Map.of());
-            return uploadResult.get("secure_url").toString();
+            return uploadResult.get("public_id").toString();
         } catch (IOException e) {
             throw new RuntimeException("Image upload failed");
         }
     }
+
+    public String buildImageUrl(String publicId) {
+        return cloudinary.url()
+                .secure(true)
+                .generate(publicId);
+    }
+
 }
