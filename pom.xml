@@ -35,6 +35,11 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <artifactId>spring-boot-devtools</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <optional>true</optional>
+        </dependency>
         <!-- Spring Data JPA (ORM) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -17,8 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,10 +45,29 @@ public class PostServiceImpl implements PostService {
                         ),
                         post.getTitle(),
                         post.getContent(),
-                        post.getUpdatedAt(),
-                        post.getCreatedAt()
+                        post.getCreatedAt(),
+                        post.getUpdatedAt()
 
                 )).collect(Collectors.toList());
+    }
+    @Override
+    public PostResponse getPostById(Long post_id) {
+        Post post = postRepository.findById(post_id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        return new PostResponse(
+                post.getId(),
+                new UserResponse(
+                        post.getUser().getId(),
+                        post.getUser().getName(),
+                        post.getUser().getEmail(),
+                        post.getUser().getProfileImage()
+                ),
+                post.getTitle(),
+                post.getContent(),
+                post.getCreatedAt(),
+                post.getUpdatedAt()
+
+        );
     }
 
     @Override
