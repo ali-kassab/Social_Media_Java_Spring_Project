@@ -10,19 +10,17 @@ import com.example.SpringBootMVC.user.dto.*;
 import com.example.SpringBootMVC.user.entity.User;
 import com.example.SpringBootMVC.user.repository.UserRepository;
 import com.example.SpringBootMVC.utils.Utils;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.HashSet;
-import java.util.List;
-
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -66,18 +64,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDetailsResponse> getAllUsers() {
+    public Page<UserDetailsResponse> getAllUsers(int page ,int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").ascending());
+        Page<User> users = userRepository.findAll(pageable);
 
-        return userRepository.findAll()
-                .stream()
-                .map(user -> new UserDetailsResponse(
-                        user.getId(),
-                        user.getName(),
-                        user.getEmail(),
-                        user.getProfileImage(),
-                        user.getCreatedAt(),
-                        user.getUpdatedAt()
-                )).collect(Collectors.toList());
+        return users.map(user -> new UserDetailsResponse(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getProfileImage(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        ));
     }
 
     @Override
@@ -126,7 +124,7 @@ public class UserServiceImpl implements UserService {
         String profileImageUrl = user.getProfileImage() != null
                 ? cloudinaryService.buildImageUrl(user.getProfileImage())
                 : null;
-        UserDetailsResponse response = new UserDetailsResponse(user.getId(), user.getName(), user.getEmail(),profileImageUrl,user.getCreatedAt(),user.getUpdatedAt());
+        UserDetailsResponse response = new UserDetailsResponse(user.getId(), user.getName(), user.getEmail(), profileImageUrl, user.getCreatedAt(), user.getUpdatedAt());
 
         return response;
     }

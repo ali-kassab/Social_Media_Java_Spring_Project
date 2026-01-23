@@ -1,7 +1,7 @@
 package com.example.SpringBootMVC.user.service;
 
 import com.example.SpringBootMVC.user.dto.*;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserService {
     String createUser(UserCreateRequest request);
 
-    List<UserDetailsResponse> getAllUsers();
+    Page<UserDetailsResponse> getAllUsers(int page , int size);
 
     UserResponse updateUser(Long userId, UserUpdateRequest request);
 
@@ -18,5 +18,4 @@ public interface UserService {
     UserDetailsResponse getLoggedUserData();
 
     String uploadProfilePhoto(MultipartFile file);
-
 }

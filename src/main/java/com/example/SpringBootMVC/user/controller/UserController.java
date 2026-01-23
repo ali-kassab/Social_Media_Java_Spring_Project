@@ -1,8 +1,10 @@
 package com.example.SpringBootMVC.user.controller;
 
+import com.example.SpringBootMVC.config.CloudinaryService;
 import com.example.SpringBootMVC.user.dto.*;
 import com.example.SpringBootMVC.user.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,7 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+
     }
 
     @PostMapping
@@ -30,8 +33,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDetailsResponse>> getAllUsers() {
-        List<UserDetailsResponse> users = userService.getAllUsers();
+    public ResponseEntity<Page<UserDetailsResponse>> getAllUsers(@RequestParam(defaultValue = "0") int page,
+                                                                 @RequestParam(defaultValue = "10") int size) {
+        Page<UserDetailsResponse> users = userService.getAllUsers(page,size);
         return ResponseEntity.ok(users);
     }
 
@@ -63,4 +67,6 @@ public class UserController {
         UploadResponse response = new UploadResponse("Profile Phot uploaded successfully", imageUrl);
         return ResponseEntity.ok(response);
     }
+
+
 }
