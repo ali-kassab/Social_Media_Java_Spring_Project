@@ -6,16 +6,14 @@ import com.example.SpringBootMVC.exception.ResourceAlreadyExistsException;
 import com.example.SpringBootMVC.exception.UserNotFoundException;
 import com.example.SpringBootMVC.role.entity.Role;
 import com.example.SpringBootMVC.role.repository.RoleRepository;
-import com.example.SpringBootMVC.user.dto.ChangePasswordReq;
-import com.example.SpringBootMVC.user.dto.UserCreateRequest;
-import com.example.SpringBootMVC.user.dto.UserResponse;
-import com.example.SpringBootMVC.user.dto.UserUpdateRequest;
+import com.example.SpringBootMVC.user.dto.*;
 import com.example.SpringBootMVC.user.entity.User;
 import com.example.SpringBootMVC.user.repository.UserRepository;
 import com.example.SpringBootMVC.utils.Utils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,15 +66,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> getAllUsers() {
+    public List<UserDetailsResponse> getAllUsers() {
 
         return userRepository.findAll()
                 .stream()
-                .map(user -> new UserResponse(
+                .map(user -> new UserDetailsResponse(
                         user.getId(),
                         user.getName(),
                         user.getEmail(),
-                        user.getProfileImage()
+                        user.getProfileImage(),
+                        user.getCreatedAt(),
+                        user.getUpdatedAt()
                 )).collect(Collectors.toList());
     }
 
@@ -119,14 +119,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getLoggedUserData() {
+    public UserDetailsResponse getLoggedUserData() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
         String profileImageUrl = user.getProfileImage() != null
                 ? cloudinaryService.buildImageUrl(user.getProfileImage())
                 : null;
-        UserResponse response = new UserResponse(user.getId(), user.getName(), user.getEmail(),profileImageUrl);
+        UserDetailsResponse response = new UserDetailsResponse(user.getId(), user.getName(), user.getEmail(),profileImageUrl,user.getCreatedAt(),user.getUpdatedAt());
 
         return response;
     }

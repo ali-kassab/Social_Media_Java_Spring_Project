@@ -9,13 +9,13 @@ import java.util.List;
 public interface UserService {
     String createUser(UserCreateRequest request);
 
-    List<UserResponse> getAllUsers();
+    List<UserDetailsResponse> getAllUsers();
 
     UserResponse updateUser(Long userId, UserUpdateRequest request);
 
     String changePassword(ChangePasswordReq request);
 
-    UserResponse getLoggedUserData();
+    UserDetailsResponse getLoggedUserData();
 
     String uploadProfilePhoto(MultipartFile file);
 

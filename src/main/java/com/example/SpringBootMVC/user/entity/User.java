@@ -5,11 +5,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "users")
 public class User {
 
@@ -42,6 +47,13 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
+    @CreatedDate
+    @Column(nullable = false,updatable = false)
+    private Instant createdAt;
+    @LastModifiedDate
+    @Column(nullable = false)
+    private Instant updatedAt;
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -59,6 +71,13 @@ public class User {
         this.password = password;
     }
 
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
 
     public Long getId() {
         return id;

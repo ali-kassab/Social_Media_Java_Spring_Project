@@ -30,8 +30,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        List<UserResponse> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDetailsResponse>> getAllUsers() {
+        List<UserDetailsResponse> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
     }
 
@@ -52,8 +52,8 @@ public class UserController {
     }
 
     @GetMapping("/user-details")
-    public ResponseEntity<UserResponse> getLoggedUserData() {
-        UserResponse response = userService.getLoggedUserData();
+    public ResponseEntity<UserDetailsResponse> getLoggedUserData() {
+        UserDetailsResponse response = userService.getLoggedUserData();
         return ResponseEntity.ok(response);
     }
 

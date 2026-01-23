@@ -2,16 +2,19 @@ package com.example.SpringBootMVC.user.dto;
 
 import com.example.SpringBootMVC.config.CloudinaryService;
 
+import java.time.Instant;
+
 public class UserResponse {
     private Long id;
     private String name;
     private String email;
     private String profileImage;
 
+
     public UserResponse() {
     }
 
-    public UserResponse(Long id, String name, String email, String profileImage) {
+    public UserResponse(Long id, String name, String email, String profileImage ) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -42,7 +45,7 @@ public class UserResponse {
         this.email = email;
     }
 
-    public String getProfileImageUrl() {
+    public String getProfileImage() {
         return profileImage;
     }
 
