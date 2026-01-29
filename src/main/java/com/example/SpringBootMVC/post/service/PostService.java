@@ -4,6 +4,7 @@ package com.example.SpringBootMVC.post.service;
 import com.example.SpringBootMVC.post.dto.PostCreateRequest;
 import com.example.SpringBootMVC.post.dto.PostResponse;
 import com.example.SpringBootMVC.post.dto.PostUpdateRequest;
+import com.example.SpringBootMVC.post.entity.Post;
 
 import java.util.List;
 

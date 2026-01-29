@@ -16,7 +16,6 @@ import java.util.Set;
 @Component
 public class Utils {
 
-
     public AuthUserDTO getUserAuthData() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
