@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class SpringBootMvcApplication {
+public class SocialMediaProject {
 	public static void main(String[] args) {
-		SpringApplication.run(SpringBootMvcApplication.class, args);
+		SpringApplication.run(SocialMediaProject.class, args);
 	}
 }
