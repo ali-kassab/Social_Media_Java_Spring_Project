@@ -9,6 +9,7 @@ import com.example.SpringBootMVC.post.entity.Post;
 import com.example.SpringBootMVC.post.service.PostService;
 import com.example.SpringBootMVC.user.entity.User;
 import com.example.SpringBootMVC.user.repository.UserRepository;
+import com.example.SpringBootMVC.utils.Utils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -21,15 +22,17 @@ import org.springframework.data.domain.Pageable;
 @Service
 public class CommentsServiceImpl implements CommentService {
     private final UserRepository userRepository;
-    private PostService postService;
-    private CommentRepository commentRepository;
-    private PostRepository postRepository;
+    private final PostService postService;
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
+    private final Utils utils;
 
-    public CommentsServiceImpl(PostService postService, CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository) {
+    public CommentsServiceImpl(PostService postService, CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository ,Utils utils) {
         this.postService = postService;
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.utils = utils;
     }
 
     public Page<CommentResponse> getComments(Long postId, int page, int size) {
@@ -50,8 +53,7 @@ public class CommentsServiceImpl implements CommentService {
 
     public void createComment(CreateCommentRequest request, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post not found"));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String email = utils.getUserAuthData().getEmail();
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         Comment comment = new Comment(
@@ -80,12 +82,8 @@ public class CommentsServiceImpl implements CommentService {
 
     public void updateComment(CreateCommentRequest request, Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        if(!comment.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You donot have permission to update comment");
+        if (utils.isAuthorizedForThis(comment.getUser().getId())) {
+            throw new RuntimeException("You do not have permission to update comment");
         }
         comment.setContent(request.getContent());
         commentRepository.save(comment);
@@ -93,12 +91,9 @@ public class CommentsServiceImpl implements CommentService {
 
     public void deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new RuntimeException("Comment not found"));
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        if(!comment.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("You donot have permission to update comment");
+
+        if (utils.isAuthorizedForThis(comment.getUser().getId())) {
+            throw new RuntimeException("You do not have permission to delete comment");
         }
         commentRepository.delete(comment);
     }
