@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>SpringBootMVC</artifactId>
+    <artifactId>Social_media_RestApi_Project</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SpringBootMVC</name>
     <description>Demo project for Spring Boot mvc</description>

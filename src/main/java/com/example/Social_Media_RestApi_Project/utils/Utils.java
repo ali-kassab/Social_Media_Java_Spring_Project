@@ -1,0 +1,47 @@
+package com.example.Social_Media_RestApi_Project.utils;
+
+import com.example.Social_Media_RestApi_Project.user.UserDetailsImpl;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
+
+@Component
+public class Utils {
+
+    public AuthUserDTO getUserAuthData() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if (auth != null && auth.getPrincipal() instanceof UserDetailsImpl) {
+            UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+            Long userIDFromAuth = userDetails.getId(); // assign the ID here
+            String mail = userDetails.getUsername();
+            List<String> roles = userDetails.getAuthorities()
+                    .stream()
+                    .map(a -> a.getAuthority())
+                    .toList();
+
+            return new AuthUserDTO(userIDFromAuth, mail, roles);
+            /*return userIDFromAuth;*/
+        }
+        return null; // in case auth is null or principal is not UserDetailsImpl
+    }
+    /**
+     * Checks whether the authenticated user is authorized to access or modify
+     * a resource that belongs to the given user.
+     * Authorization is granted if:
+     * <ul>
+     *   <li>The authenticated user's ID matches the target user ID, or</li>
+     *   <li>The authenticated user has the ROLE_ADMIN role.</li>
+     * </ul>
+     *
+     * @param userId the ID of the resource owner
+     * @return true if the user is authorized, false otherwise
+     */
+    public Boolean isAuthorizedForThis(Long userId) {
+
+        return Objects.equals(getUserAuthData().getId(), userId) || getUserAuthData().getRoles().contains("ROLE_ADMIN");
+    }
+}
